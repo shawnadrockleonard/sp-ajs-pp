@@ -3,3 +3,9 @@
 ################################################################################
 
 /src/ajs.1/obj/Debug
+/src/ajs.2/bin/Debug
+/src/ajs.2/node_modules
+/src/ajs.2/obj/Debug
+/src/ajs.1/bin/Debug
+/src/ajs.1/bower_components/angular
+/src/ajs.2/npm-debug.log
