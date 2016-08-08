@@ -33,10 +33,26 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="App.config" />
     <None Include="bower.json" />
     <None Include="package.json" />
     <None Include="README.md" />
+    <None Include="tsconfig.json" />
+    <None Include="tslint.json" />
+    <None Include="typedoc.json" />
+    <None Include="typings.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="ajs2-bootstrap.ts" />
+    <TypeScriptCompile Include="components\peoplepicker.ts" />
+    <TypeScriptCompile Include="components\peoplepicker\peoplepicker-string.ts" />
+    <TypeScriptCompile Include="components\peoplepicker\peoplepicker-utils.ts" />
+    <TypeScriptCompile Include="components\peoplepicker\peoplepicker.component.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="gulp-tasks\lint.js" />
+    <Content Include="gulpfile.js" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

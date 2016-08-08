@@ -1,0 +1,19 @@
+﻿{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "system",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "noEmitHelpers": true,
+    "noImplicitAny": true,
+    "declaration": false
+  },
+  "exclude": [
+    "node_modules"
+  ],
+  "files": [
+    "./ajs2-bootstrap.ts"
+  ]
+}
