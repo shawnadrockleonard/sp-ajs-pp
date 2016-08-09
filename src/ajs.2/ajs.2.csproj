@@ -46,14 +46,21 @@
   <ItemGroup>
     <TypeScriptCompile Include="ajs2-bootstrap.ts" />
     <TypeScriptCompile Include="components\peoplepicker.ts" />
+    <TypeScriptCompile Include="components\peoplepicker\peoplepicker-principalid.ts" />
+    <TypeScriptCompile Include="components\peoplepicker\peoplepicker-principaltype.ts" />
     <TypeScriptCompile Include="components\peoplepicker\peoplepicker-string.ts" />
     <TypeScriptCompile Include="components\peoplepicker\peoplepicker-utils.ts" />
     <TypeScriptCompile Include="components\peoplepicker\peoplepicker.component.ts" />
+    <TypeScriptCompile Include="demo\index.ts" />
+    <TypeScriptCompile Include="demo\peoplepicker\peoplepicker-demo.ts" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="components\peoplepicker\peoplepicker.component.html" />
+    <Content Include="demo\peoplepicker\peoplepicker-demo.html" />
     <Content Include="gulp-tasks\lint.js" />
     <Content Include="gulpfile.js" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

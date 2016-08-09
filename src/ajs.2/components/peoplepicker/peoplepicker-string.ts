@@ -11,13 +11,18 @@
     Escape a string for REST API posts
     */
     escapeRegexp(queryToEscape: string): string;
+
+    /**
+    * String formatting
+    */
+    Format(str: string): string;
 }
 
 /**
     Replaces all tokens and returns a string concatenated with the new token
 */
 String.prototype.ReplaceAll = function (token: string, newToken: string, ignoreCase: boolean) : string {
-    var _token;
+    var _token : string;
     var str = this + "";
     var i = -1;
 
@@ -46,3 +51,11 @@ String.prototype.escapeRegexp = function (queryToEscape: string): string {
     // 'a' the result will be \a
     return queryToEscape.replace(/([.?*+^$[\]\\(){}|-])/g, '\\$1');
 }
+
+
+String.prototype.Format = function (str: string) {
+    for (var i = 1; i < arguments.length; i++) {
+        str = str.ReplaceAll("{" + (i - 1) + "}", arguments[i], false);
+    }
+    return str;
+};

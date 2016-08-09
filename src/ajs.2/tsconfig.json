@@ -14,6 +14,7 @@
     "node_modules"
   ],
   "files": [
-    "./ajs2-bootstrap.ts"
+    "./ajs2-bootstrap.ts",
+    "./demo/index.ts"
   ]
 }
