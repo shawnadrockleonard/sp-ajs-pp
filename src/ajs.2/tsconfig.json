@@ -15,6 +15,6 @@
   ],
   "files": [
     "./ajs2-bootstrap.ts",
-    "./demo/index.ts"
+    "./index.ts"
   ]
 }
