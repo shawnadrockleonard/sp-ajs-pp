@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="09c53d2f-1269-4f82-a599-83d5a8a9e68f" solutionId="09c53d2f-1269-4f82-a599-83d5a8a9e68f" resetWebServer="false" sharePointProductVersion="16.0" name="ajsaddin" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="db12e921-6b41-4d65-989b-31fa40b94037" />
+    <featureReference itemId="56168ece-81dd-4020-806b-6e92ec5e737c" />
+  </features>
+</package>
