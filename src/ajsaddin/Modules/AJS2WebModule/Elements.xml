@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
-  <Module Name="AJS2WebModule">
-    <File Path="AJS2WebModule\Sample.txt" Url="AJS2WebModule/Sample.txt" ReplaceContent="TRUE" />
-  </Module>
-</Elements>

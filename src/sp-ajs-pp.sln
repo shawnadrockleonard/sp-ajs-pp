@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajs.2", "ajs.2\ajs.2.csproj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED2D1898-9274-44C6-8730-4AD764156A4C}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
@@ -16,7 +17,9 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ajsdemoweb", "ajsdemoweb\aj
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular2", "Angular2", "{1D39580E-7923-4EAA-A54C-62C74506E361}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajsaddin", "ajsaddin\ajsaddin.csproj", "{A4B4CD8A-3D13-4EF9-93E5-A195673738C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajs-sp-addIn", "ajs-sp-addIn\ajs-sp-addIn.csproj", "{1752455B-CEA1-4FF3-ADC6-8F724E5FCC73}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajs-sp-addInWeb", "ajs-sp-addInWeb\ajs-sp-addInWeb.csproj", "{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,12 +39,16 @@ Global
 		{71AECE82-11F9-4C34-B821-DDAE6C4446FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71AECE82-11F9-4C34-B821-DDAE6C4446FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71AECE82-11F9-4C34-B821-DDAE6C4446FA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A4B4CD8A-3D13-4EF9-93E5-A195673738C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A4B4CD8A-3D13-4EF9-93E5-A195673738C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A4B4CD8A-3D13-4EF9-93E5-A195673738C9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{A4B4CD8A-3D13-4EF9-93E5-A195673738C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A4B4CD8A-3D13-4EF9-93E5-A195673738C9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A4B4CD8A-3D13-4EF9-93E5-A195673738C9}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{1752455B-CEA1-4FF3-ADC6-8F724E5FCC73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1752455B-CEA1-4FF3-ADC6-8F724E5FCC73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1752455B-CEA1-4FF3-ADC6-8F724E5FCC73}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1752455B-CEA1-4FF3-ADC6-8F724E5FCC73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1752455B-CEA1-4FF3-ADC6-8F724E5FCC73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1752455B-CEA1-4FF3-ADC6-8F724E5FCC73}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -49,6 +56,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{50AEAE65-83FB-410B-B4A8-4CDA1273F85C} = {1D39580E-7923-4EAA-A54C-62C74506E361}
 		{71AECE82-11F9-4C34-B821-DDAE6C4446FA} = {1D39580E-7923-4EAA-A54C-62C74506E361}
-		{A4B4CD8A-3D13-4EF9-93E5-A195673738C9} = {1D39580E-7923-4EAA-A54C-62C74506E361}
+		{1752455B-CEA1-4FF3-ADC6-8F724E5FCC73} = {1D39580E-7923-4EAA-A54C-62C74506E361}
+		{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357} = {1D39580E-7923-4EAA-A54C-62C74506E361}
 	EndGlobalSection
 EndGlobal

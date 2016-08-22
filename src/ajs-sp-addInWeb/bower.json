@@ -1,0 +1,21 @@
+{
+  "name": "ajs-pnp-peoplepicker",
+  "description": "A component for injecting the people picker against a specific model property.",
+  "main": "dist/ajs-pp.js",
+  "authors": [
+    "Shawn Leonard",
+    "Dan Biscup"
+  ],
+  "dependencies": {
+    "es6-promise": "3.2.2",
+    "sp-pnp-js": "1.0.3"
+  },
+  "keywords": [
+    "sharepoint",
+    "people-picker"
+  ],
+  "license": "MIT",
+  "resolutions": {
+    "es6-promise": "3.2.2"
+  }
+}

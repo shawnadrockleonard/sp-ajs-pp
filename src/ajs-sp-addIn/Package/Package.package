@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="ff236535-840c-4eab-a92e-8ec0e658de63" solutionId="ff236535-840c-4eab-a92e-8ec0e658de63" resetWebServer="false" sharePointProductVersion="16.0" name="ajs-sp-addIn" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel">
+  <features>
+    <featureReference itemId="d685a358-aa79-48f8-b5aa-a7872ec661f4" />
+  </features>
+</package>
