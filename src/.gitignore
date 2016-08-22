@@ -11,21 +11,9 @@ npm-debug.log
 
 # .net packages
 /packages
+/.vs
 
 # ignore build and dist for now
 /bin
 /pkg
 /obj
-/bundles
-/dist
-/coverage
-/ts
-/doc
-
-# ignore inline compiling
-/components/**/*.js
-/components/**/*.js.map
-/components/**/*.d.ts
-ajs2-bootstrap.js
-ajs2-bootstrap.d.ts
-ajs2-bootstrap.js.map
