@@ -76,6 +76,7 @@
     </None>
     <None Include="SharePointProjectItem.spdata">
       <SharePointProjectItemId>{ba40dee6-0b63-4ec6-b240-ff9d9dab0b91}</SharePointProjectItemId>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
