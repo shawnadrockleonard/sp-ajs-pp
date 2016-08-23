@@ -225,27 +225,30 @@ export class spcontextService {
 
     /**
      * Will execute current context to query the username
+     *   Returns a userContext object if successful
      */
     retrieveUserName() {
-        var self = this;
+        var parent = this;
+        var usrdeferred = $.Deferred();
         console.log('retreive username');
 
-
-        var appContextSite = new SP.AppContextSite(self.appContext, self.SPHostUrl);
+        var appContextSite = new SP.AppContextSite(parent.appContext, parent.SPHostUrl);
         var hostWeb = appContextSite.get_web();
-        var appWeb = self.appContext.get_web();
+        var appWeb = parent.appContext.get_web();
 
         var userContext = hostWeb.get_currentUser();
-        self.appContext.load(userContext);
-        self.appContext.executeQueryAsync(
+        parent.appContext.load(userContext);
+        parent.appContext.executeQueryAsync(
             function () {
-                self.SharePointUserName = userContext.get_title();
-                $("#userDisplayName").html(self.SharePointUserName);
+                parent.SharePointUserName = userContext.get_title();
+                usrdeferred.resolve(userContext);
             },
             function (sender, args) {
-                console.log("Failed to retrieve username for url {0}", self.SPAppUrl);
+                console.log("Failed to retrieve username for url {0}", parent.SPAppUrl);
+                usrdeferred.reject(sender, args);
             });
 
+        return usrdeferred.promise();
     }
 
 

@@ -33,4 +33,15 @@ export class PeoplePickerPrincipalId {
         this.loginNameDisplay = loginNameDisp;
     }
 
+
+    /**
+     * Returns a cleansed version of the UPN
+     */
+    public getLookupValue(): string {
+        return (this.login) ? this.login.replace("\\", "\\\\") : this.lookupId
+    };
+
+    public getResultDisplay(): string {
+        return "Remove person or group (" + this.name + ")";
+    };
 }

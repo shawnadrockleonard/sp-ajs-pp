@@ -8,21 +8,20 @@ import { Http, HTTP_PROVIDERS, XHRBackend } from '@angular/http';
 import {PeoplePickerUtils} from './peoplepicker-utils.ts';
 import {PeoplePickerPrincipalId} from './peoplepicker-principalid.ts';
 import { spcontextService } from '../services/spcontext-service';
-import './peoplepicker-string.ts';
 
 
 @Component({
     selector: 'peoplepicker[ngModel]',
     template: `
-<peoplepicker-inner [allowMultiple]="allowMultiple" [principalType]="principalType">
+<peoplepicker-inner [allowMultiple]="allowMultiple" [principalType]="principalType" [SharePointContext]="SharePointContext" (update)="onUpdate($event)" (selectionDone)="onSelectionDone($event)">
     <div class="cam-peoplepicker-userlookup ms-fullWidth form-control">
         <span>
             <span *ngFor="let usr of ResolvedUsers" class="cam-peoplepicker-userSpan">
-                <span class="cam-entity-resolved">{{usr.name}}</span>&nbsp;<span title="{{getResultDisplay(usr)}}"
+                <span class="cam-entity-resolved">{{usr.name}}</span>&nbsp;<span title="{{usr.getResultDisplay()}}"
                                                                        class="cam-peoplepicker-delImage" (click)="OnDeleteProcessedUser(usr)" href="#">(x)</span>
             </span>
         </span>
-        <input class="cam-peoplepicker-edit" type="text" width="400" [(ngModel)]="searchText" (keypress)="peopleSearchHandler($event)"/>
+        <input class="cam-peoplepicker-edit" type="text" width="400" [(ngModel)]="searchText" [disabled]="!ContextLoaded()" (keypress)="peopleSearchHandler($event)"/>
     </div>
     <div [hidden]="!PickerResultsDisplay" class="cam-peoplepicker-usersearch ms-emphasisBorder">
         <div class='ms-bgHoverable' style='width: 400px; padding: 4px;'
@@ -51,6 +50,7 @@ import './peoplepicker-string.ts';
 export class PeoplePickerComponent implements ControlValueAccessor, AfterViewInit {
     @Input() public principalType: SP.Utilities.PrincipalType;
     @Input() public allowMultiple: boolean;
+    @Input() public SharePointContext: SP.ClientContext;
 
     public pickerFieldSpanName: string = "";
     public pickerFieldInputName: string = "";
@@ -59,7 +59,6 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
     public pickerFieldHiddenName: string = "";
     public searchText: string = "";
 
-    public SharePointContext: SP.ClientContext;
     public ServerDataMethod: any;
     public SpGroupName: string;
     public SpHostUrl: string;
@@ -104,19 +103,8 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
     }
 
     public ngAfterViewInit(): any {
-
         var parent = this; 
-
-        this.spcontext.loadSharePointContext()
-            .done(function (runtimeload, spload, spuiload, sprequestload) {
-
-                parent.spcontext.retrieveUserName();
-
-                parent.Initialize();
-            })
-            .fail(function (sender, args) {
-                console.log("Error {0} in ngAfterViewInit", args.message);
-            });
+        // TODO: examine if this is where we parse the JSON into the object
     }
 
     public set activeUsers(value: Array<PeoplePickerPrincipalId>) {
@@ -147,6 +135,15 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
     public registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
 
     public registerOnTouched(fn: () => {}): void { this.onTouched = fn; }
+
+
+    public ContextLoaded(): boolean {
+        var checkUrl = this.SharePointContext;
+        if (checkUrl != undefined && checkUrl.get_url() != "") {
+            return true;
+        }
+        return false;
+    }
 
     public GetPrincipalType() {
         return this.principalType;
@@ -317,6 +314,7 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
         }
 
         this.pickerFieldHiddenName = JSON.stringify(this.ResolvedUsers);
+        this.onUpdate(this.ResolvedUsers);
     };
 
     // Remove last added resolved user from the array and updates the hidden field control with a JSON string
@@ -326,23 +324,13 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
     };
 
 
-    /**
-     * Returns a cleansed version of the UPN
-     */
-    public getLookupValue(usr: PeoplePickerPrincipalId): string {
-        return (usr.login) ? usr.login.replace("\\", "\\\\") : usr.lookupId
-    };
-
-    public getResultDisplay(usr: PeoplePickerPrincipalId): string {
-        return "Remove person or group (" + usr.name + ")";
-    };
 
     public OnDeleteProcessedUser(lookupValue: PeoplePickerPrincipalId) {
-        alert('hello person');
+        this.RemoveResolvedUser(lookupValue);
     }
 
     public onRecipientSelected(lookupValue: PeoplePickerPrincipalId) {
-        alert('hello recipient');
+        this.RecipientSelected(lookupValue.login, lookupValue.name, lookupValue.email);
     }
 
     // Remove resolved user from the array and updates the hidden field control with a JSON string
@@ -352,17 +340,18 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
 
         for (var i = 0; i < this.ResolvedUsers.length; i++) {
             var resolvedLookupValue = this.ResolvedUsers[i].login ? this.ResolvedUsers[i].login : this.ResolvedUsers[i].lookupId;
-            if (resolvedLookupValue !== this.getLookupValue(lookupValue) || userRemoved === true) {
+            if (resolvedLookupValue !== lookupValue.getLookupValue() || userRemoved === true) {
                 newResolvedUsers.push(this.ResolvedUsers[i]);
             }
 
             // Handle duplicates if enabled, only remove one user
-            if (resolvedLookupValue === this.getLookupValue(lookupValue)) {
+            if (resolvedLookupValue === lookupValue.getLookupValue()) {
                 userRemoved = true;
             }
         }
         this.ResolvedUsers = newResolvedUsers;
-        this.pickerFieldHiddenName = JSON.stringify(this.ResolvedUsers);
+        this.pickerFieldHiddenName = JSON.stringify(newResolvedUsers);
+        this.onUpdate(newResolvedUsers);
     };
 
     // Update the people picker control to show the newly added user
@@ -373,7 +362,7 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
         this.PushResolvedUser(this.ResolvedUser(login, name, email));
 
         // Prepare the edit control for a second user selection
-        this.pickerFieldInputName = "";
+        this.searchText = "";
     };
 
     // Delete a resolved user
@@ -468,8 +457,6 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
         var parent = this;
 
 
-        parent.SharePointContext = parent.spcontext.appContext;
-
         // is there data in the hidden control...if so show it
         if (parent.pickerFieldHiddenName.length > 0) {
             // Deserialize JSON string into list of resolved users
@@ -516,6 +503,7 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
                 }
 
                 if (txt.length > this.GetMinimalCharactersBeforeSearching()) {
+                    parent.ResultantUsers = new Array<PeoplePickerPrincipalId>();
                     this.HasResultantMessage = true;
                     this.ResultantMessage = 'Searching ....';
                     this.ShowSelectionBox();

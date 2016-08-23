@@ -3,33 +3,32 @@
     <h4>{{name}}</h4>
 </div>
 
+<hr />
 
 <div class="form-group">
     <div class="row">
-        <label for="title" class="control-label col-lg-4">RFC Title</label>
-        <div class="col-lg-4">
-            <input class="form-control" id="ReleaseTitle" name="ReleaseTitle" type="text" [(ngModel)]="name">
-        </div>
-        <div class="col-lg-4">Enter a short description of the change</div>
-    </div>
-
-    <div class="row">
-        <div class="col-lg-12">
-            Single Picker
-            <peoplepicker [(ngModel)]="peopleSinglePicker" [allowMultiple]="false" [principalType]="1"></peoplepicker>
+        <label for="title" class="control-label col-lg-4">Single Picker</label>
+        <div class="col-lg-8">
+            <peoplepicker [(ngModel)]="peopleSinglePicker" [allowMultiple]="false" [principalType]="1" [SharePointContext]="peoplePickerContext"></peoplepicker>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-12">
-            Break Point or Point Break
-        </div>
+    <div class="row" style="padding:20px 0px 20px 0px">
+        <div class="col-lg-12">&nbsp;</div>
     </div>
 
     <div class="row">
-        <div class="col-lg-12">
+        <label for="title" class="control-label col-lg-4">
             Multi Picker
-            <peoplepicker [(ngModel)]="peopleMultPicker" [allowMultiple]="true" [principalType]="1"></peoplepicker>
+        </label>
+        <div class="col-lg-8">
+            <peoplepicker [(ngModel)]="peopleMultPicker" [allowMultiple]="true" [principalType]="1" [SharePointContext]="peoplePickerContext"></peoplepicker>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <button (click)="checkModel()">Check Model</button>
         </div>
     </div>
 </div>
