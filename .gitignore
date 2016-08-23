@@ -2,26 +2,21 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/src/ajs.1/obj/Debug
-/src/ajs.2/bin/Debug
-/src/ajs.2/node_modules
-/src/ajs.2/obj/Debug
-/src/ajs.1/bin/Debug
-/src/ajs.1/bower_components/angular
-/src/ajs.2/npm-debug.log
-/src/ajs.1/AJSPP/AJSPPWeb/bin
-/src/ajs.2/bower_components
-/src/ajs.1/ajs.1.csproj.user
-/src/ajsdemoweb/bin/Debug/net461
-/src/ajs2/bin/Debug/net461
-/src/ajs2/bower_components
-/src/ajs2/node_modules
-/src/ajs2/obj/Debug/net461
-/src/ajs2/typings
-/src/ajsdemoweb/node_modules
-/src/ajsdemoweb/obj/Debug/net461
-/src/ajsdemoweb/typings
-/src/node_modules
-/src/npm-debug.log
-/src/ajs-sp-addIn/bin/Debug
-/src/.vs
+# Dependency directory
+# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
+/node_modules
+npm-debug.log
+
+# type script artifacts
+/typings
+
+# Bower components
+/bower_components
+
+# ignore build and dist for now
+/bin
+/pkg
+/obj
+
+/**/*.csproj.user
+

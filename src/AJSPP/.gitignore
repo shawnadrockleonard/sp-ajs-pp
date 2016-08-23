@@ -11,17 +11,3 @@ npm-debug.log
 /pkg
 /pkgobj
 /obj
-/bundles
-/dist
-/coverage
-/ts
-/doc
-
-# ignore inline compiling
-*.csproj.user
-/components/**/*.js
-/components/**/*.js.map
-/components/**/*.d.ts
-ajs2-bootstrap.js
-ajs2-bootstrap.d.ts
-ajs2-bootstrap.js.map
