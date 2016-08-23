@@ -19,4 +19,5 @@ npm-debug.log
 /obj
 
 /**/*.csproj.user
-
+/.vs/**/*.config
+/.vs
