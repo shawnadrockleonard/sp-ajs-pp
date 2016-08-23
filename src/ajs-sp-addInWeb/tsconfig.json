@@ -13,7 +13,7 @@
   "compileOnSave": true,
   "exclude": [
     "node_modules",
-    "typings/main"
+    "typings"
   ],
   "files": [
     "components/peoplepicker.ts",

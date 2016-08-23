@@ -61,19 +61,10 @@
     </AppManifestFile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ajs-sp-addInWeb\ajs-sp-addInWeb.csproj">
-      <Project>{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357}</Project>
-      <Name>ajs-sp-addInWeb</Name>
-      <Private>True</Private>
-      <RoleType>Web</RoleType>
-      <OutputItemType>SharePointWebProjectOutput</OutputItemType>
-      <RoleName>ajs-sp-addInWeb</RoleName>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include=".gitignore" />
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Features\Feature1\Feature1.feature">
       <FeatureId>{d685a358-aa79-48f8-b5aa-a7872ec661f4}</FeatureId>
     </None>
@@ -86,6 +77,17 @@
     <None Include="SharePointProjectItem.spdata">
       <SharePointProjectItemId>{ba40dee6-0b63-4ec6-b240-ff9d9dab0b91}</SharePointProjectItemId>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ajs-sp-addInWeb\ajs-sp-addInWeb.csproj">
+      <Project>{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357}</Project>
+      <Name>ajs-sp-addInWeb</Name>
+      <Private>True</Private>
+      <RoleType>Web</RoleType>
+      <OutputItemType>SharePointWebProjectOutput</OutputItemType>
+      <RoleName>ajs-sp-addInWeb</RoleName>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

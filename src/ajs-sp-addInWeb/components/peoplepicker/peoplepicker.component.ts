@@ -1,7 +1,5 @@
 ﻿/// <reference path="../../typings/globals/sharepoint/index.d.ts" />
 /// <reference path="../../typings/globals/jquery/index.d.ts" />
-/// <reference path="peoplepicker-principaltype.d.ts" />
-
 
 import {Component, Self, Input, Output, AfterViewInit, EventEmitter} from '@angular/core';
 import {CORE_DIRECTIVES, NgFor} from '@angular/common';
@@ -10,6 +8,8 @@ import { Http, HTTP_PROVIDERS, XHRBackend } from '@angular/http';
 import {PeoplePickerUtils} from './peoplepicker-utils.ts';
 import {PeoplePickerPrincipalId} from './peoplepicker-principalid.ts';
 import { spcontextService } from '../services/spcontext-service';
+import './peoplepicker-string.ts';
+
 
 @Component({
     selector: 'peoplepicker[ngModel]',
