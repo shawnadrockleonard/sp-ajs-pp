@@ -1,32 +1,63 @@
-﻿/// <reference path="../../../typings/globals/sharepoint/index.d.ts" />
-/// <reference path="../../../typings/globals/jquery/index.d.ts" />
+﻿/// <reference path="../../typings/globals/sharepoint/index.d.ts" />
+/// <reference path="../../typings/globals/jquery/index.d.ts" />
 /// <reference path="peoplepicker-principaltype.d.ts" />
 
 
-import {Component, Self, Input, Output, EventEmitter} from '@angular/core';
-import {CORE_DIRECTIVES} from '@angular/common';
-import {FORM_DIRECTIVES, NgModel} from '@angular/forms';
-import { Http } from '@angular/http';
+import {Component, Self, Input, Output, AfterViewInit, EventEmitter} from '@angular/core';
+import {CORE_DIRECTIVES, NgFor} from '@angular/common';
+import {FORM_DIRECTIVES, ControlValueAccessor, NgModel} from '@angular/forms';
+import { Http, HTTP_PROVIDERS, XHRBackend } from '@angular/http';
 import {PeoplePickerUtils} from './peoplepicker-utils.ts';
 import {PeoplePickerPrincipalId} from './peoplepicker-principalid.ts';
+import { spcontextService } from '../services/spcontext-service';
 
 @Component({
     selector: 'peoplepicker[ngModel]',
-    templateUrl: './components/peoplepicker/peoplepicker.component.html',
-    directives: [FORM_DIRECTIVES, CORE_DIRECTIVES]
+    template: `
+<peoplepicker-inner [allowMultiple]="allowMultiple" [principalType]="principalType">
+    <div class="cam-peoplepicker-userlookup ms-fullWidth form-control">
+        <span>
+            <span *ngFor="let usr of ResolvedUsers" class="cam-peoplepicker-userSpan">
+                <span class="cam-entity-resolved">{{usr.name}}</span>&nbsp;<span title="{{getResultDisplay(usr)}}"
+                                                                       class="cam-peoplepicker-delImage" (click)="OnDeleteProcessedUser(usr)" href="#">(x)</span>
+            </span>
+        </span>
+        <input class="cam-peoplepicker-edit" type="text" width="400" [(ngModel)]="searchText" (keypress)="peopleSearchHandler($event)"/>
+    </div>
+    <div [hidden]="!PickerResultsDisplay" class="cam-peoplepicker-usersearch ms-emphasisBorder">
+        <div class='ms-bgHoverable' style='width: 400px; padding: 4px;'
+             *ngFor="let usr of ResultantUsers"
+             (click)="onRecipientSelected(usr)">
+            <span *ngIf="ShowLoginName">{{usr.displayName}}<br /></span>
+            <span *ngIf="ShowTitle">{{usr.title}}</span>
+        </div>
+        <div [hidden]="!HasResultantMessage" class='ms-emphasisBorder' style='width: 400px; padding: 4px; border-left: none; border-bottom: none; border-right: none; cursor: default;'>
+            <span>{{ResultantMessage}}</span>
+        </div>
+    </div>
+    <input type="hidden" class="form-control" [(ngModel)]="pickerFieldHiddenName" />
+</peoplepicker-inner>
+    `,
+    directives: [
+        FORM_DIRECTIVES,
+        CORE_DIRECTIVES],
+    providers: [
+        HTTP_PROVIDERS,
+        spcontextService]
 })
 
-export class PeoplePickerComponent {
-    @Input() public principalType: SharePointEnums.SPPrincipalType
-
-    public pickerFieldSpanName: string;
-    public pickerFieldInputName: string;
-    public pickerFieldInputNameFocus: boolean;
-    public pickerFieldDisplayName: string;
-    public pickerFieldHiddenName: string;
 
 
-    public cd: NgModel;
+export class PeoplePickerComponent implements ControlValueAccessor, AfterViewInit {
+    @Input() public principalType: SP.Utilities.PrincipalType;
+    @Input() public allowMultiple: boolean;
+
+    public pickerFieldSpanName: string = "";
+    public pickerFieldInputName: string = "";
+    public pickerFieldInputNameFocus: boolean = false;
+    public pickerFieldDisplayName: string = "";
+    public pickerFieldHiddenName: string = "";
+    public searchText: string = "";
 
     public SharePointContext: SP.ClientContext;
     public ServerDataMethod: any;
@@ -50,13 +81,72 @@ export class PeoplePickerComponent {
     private _lastQueryID = 1;
 
     //Collections
-    public ResolvedUsers = Array<PeoplePickerPrincipalId>();
-    public ResultantUsers = Array<PeoplePickerPrincipalId>();
+    public ResolvedUsers: Array<PeoplePickerPrincipalId> = new Array<PeoplePickerPrincipalId>();
+    public ResultantUsers: Array<PeoplePickerPrincipalId> = new Array<PeoplePickerPrincipalId>();
 
-    public constructor( @Self() cd: NgModel) {
+    @Output() public selectionDone: EventEmitter<Array<PeoplePickerPrincipalId>> = new EventEmitter<Array<PeoplePickerPrincipalId>>(undefined);
+
+
+    public cd: NgModel;
+    private _nowUsers: Array<PeoplePickerPrincipalId> = new Array<PeoplePickerPrincipalId>();
+    public onChange: any = Function.prototype;
+    public onTouched: any = Function.prototype;
+
+    @Input()
+    public get activeUsers(): Array<PeoplePickerPrincipalId> {
+        return this.ResolvedUsers || this._nowUsers;
+    }
+
+    public constructor( @Self() cd: NgModel, private spcontext: spcontextService) {
         this.cd = cd;
         this.pickerFieldInputNameFocus = false;
+        cd.valueAccessor = this;
     }
+
+    public ngAfterViewInit(): any {
+
+        var parent = this; 
+
+        this.spcontext.loadSharePointContext()
+            .done(function (runtimeload, spload, spuiload, sprequestload) {
+
+                parent.spcontext.retrieveUserName();
+
+                parent.Initialize();
+            })
+            .fail(function (sender, args) {
+                console.log("Error {0} in ngAfterViewInit", args.message);
+            });
+    }
+
+    public set activeUsers(value: Array<PeoplePickerPrincipalId>) {
+        this.ResolvedUsers = value;
+    }
+
+    public onSelectionDone(event: Array<PeoplePickerPrincipalId>): void {
+        this.selectionDone.emit(event);
+    }
+
+    public onUpdate(event: Array<PeoplePickerPrincipalId>): void {
+        this.writeValue(event);
+        this.cd.viewToModelUpdate(event);
+    }
+
+    public writeValue(value: Array<PeoplePickerPrincipalId>): void {
+        if (value === this.ResolvedUsers) {
+            return;
+        }
+        if (value && value instanceof Array) {
+            this.ResolvedUsers = value;
+            return;
+        }
+
+        this.ResolvedUsers = value ? value : new Array<PeoplePickerPrincipalId>();
+    }
+
+    public registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
+
+    public registerOnTouched(fn: () => {}): void { this.onTouched = fn; }
 
     public GetPrincipalType() {
         return this.principalType;
@@ -66,7 +156,7 @@ export class PeoplePickerComponent {
      * Property wrapped in function to allow access from event handler
      * @param principalType
      */
-    public SetPrincipalType(principalType: SharePointEnums.SPPrincipalType) {
+    public SetPrincipalType(principalType: SP.Utilities.PrincipalType) {
         //See http://msdn.microsoft.com/en-us/library/office/microsoft.sharepoint.client.utilities.principaltype.aspx
         //This enumeration has a FlagsAttribute attribute that allows a bitwise combination of its member values.
         //None Enumeration whose value specifies no principal type. Value = 0. 
@@ -236,6 +326,25 @@ export class PeoplePickerComponent {
     };
 
 
+    /**
+     * Returns a cleansed version of the UPN
+     */
+    public getLookupValue(usr: PeoplePickerPrincipalId): string {
+        return (usr.login) ? usr.login.replace("\\", "\\\\") : usr.lookupId
+    };
+
+    public getResultDisplay(usr: PeoplePickerPrincipalId): string {
+        return "Remove person or group (" + usr.name + ")";
+    };
+
+    public OnDeleteProcessedUser(lookupValue: PeoplePickerPrincipalId) {
+        alert('hello person');
+    }
+
+    public onRecipientSelected(lookupValue: PeoplePickerPrincipalId) {
+        alert('hello recipient');
+    }
+
     // Remove resolved user from the array and updates the hidden field control with a JSON string
     public RemoveResolvedUser(lookupValue: PeoplePickerPrincipalId) {
         var newResolvedUsers = Array<PeoplePickerPrincipalId>();
@@ -243,12 +352,12 @@ export class PeoplePickerComponent {
 
         for (var i = 0; i < this.ResolvedUsers.length; i++) {
             var resolvedLookupValue = this.ResolvedUsers[i].login ? this.ResolvedUsers[i].login : this.ResolvedUsers[i].lookupId;
-            if (resolvedLookupValue !== lookupValue.getLookupValue() || userRemoved === true) {
+            if (resolvedLookupValue !== this.getLookupValue(lookupValue) || userRemoved === true) {
                 newResolvedUsers.push(this.ResolvedUsers[i]);
             }
 
             // Handle duplicates if enabled, only remove one user
-            if (resolvedLookupValue === lookupValue.getLookupValue()) {
+            if (resolvedLookupValue === this.getLookupValue(lookupValue)) {
                 userRemoved = true;
             }
         }
@@ -285,7 +394,7 @@ export class PeoplePickerComponent {
      * @param queryNumber
      * @param searchResult
      */
-    public QuerySuccess(queryNumber: any, searchResult: any) {
+    public QuerySuccess(sender: any, args: SP.ClientRequestSucceededEventArgs, queryNumber: any, searchResult: any): void {
         var resultValue = '[]';
         //Results from code-behind WebMethod
         if (typeof searchResult === 'string') {
@@ -358,13 +467,17 @@ export class PeoplePickerComponent {
         //Capture reference to current control so that it can be used in event handlers
         var parent = this;
 
+
+        parent.SharePointContext = parent.spcontext.appContext;
+
         // is there data in the hidden control...if so show it
-        if (this.pickerFieldHiddenName.length > 0) {
+        if (parent.pickerFieldHiddenName.length > 0) {
             // Deserialize JSON string into list of resolved users
-            var resultValue = this.pickerFieldHiddenName;
+            var resultValue = parent.pickerFieldHiddenName;
             var results = $.parseJSON(resultValue);
             if (results && results.length && results.length > 0) {
 
+                var projectUsers = new Array<PeoplePickerPrincipalId>();
                 var displayCount = results.length;
                 for (var i = 0; i < displayCount; i++) {
                     var item = results[i];
@@ -372,12 +485,71 @@ export class PeoplePickerComponent {
                     var displayName = item['displayName'];
                     var title = item['title'];
                     var email = item['email'];
-                    var usrModel = new PeoplePickerPrincipalId(loginName, this.HtmlEncode(displayName), email, displayName, title, loginName);
-                    this.ResultantUsers.push(usrModel);
+                    var usrModel = new PeoplePickerPrincipalId(loginName, parent.HtmlEncode(displayName), email, displayName, title, loginName);
+                    projectUsers.push(usrModel);
+                }
+                this.ResultantUsers = projectUsers;
+            }
+        }
+    };
+
+    public peopleSearchHandler(e: KeyboardEvent) {
+
+        //Capture reference to current control so that it can be used in event handlers
+        var parent = this;
+
+        var keynum = e.which;
+
+        //backspace
+        if (keynum === 8) {
+            //TODO implement logic here
+        }
+        // An ascii character or a space has been pressed
+        else if ((keynum >= 48 && keynum <= 90) || (keynum >= 96 && keynum <= 122) || keynum === 32) {
+            console.log("KeyPress {keynum} char {1}", keynum, e.key, this.searchText);
+            var txt = this.searchText;
+            txt += e.key;
+
+            if (txt.length > 0) {
+                if (this.GetMinimalCharactersBeforeSearching() < 1) {
+                    this.SetMinimalCharactersBeforeSearching(1);
+                }
+
+                if (txt.length > this.GetMinimalCharactersBeforeSearching()) {
+                    this.HasResultantMessage = true;
+                    this.ResultantMessage = 'Searching ....';
+                    this.ShowSelectionBox();
+
+                    var ptype = SP.Utilities.PrincipalType.user;
+                    
+                    var query = new SP.UI.ApplicationPages.ClientPeoplePickerQueryParameters();
+                    query.set_allowMultipleEntities(this.allowMultiple);
+                    query.set_maximumEntitySuggestions(2000);
+                    query.set_principalType(this.principalType);
+                    query.set_principalSource(SP.Utilities.PrincipalSource.all);
+                    query.set_queryString(txt);
+
+                    var searchResult = SP.UI.ApplicationPages.ClientPeoplePickerWebServiceInterface.clientPeoplePickerSearchUser(this.SharePointContext, query);
+
+                    // update the global queryID variable so that we can correlate incoming delegate calls later on
+                    parent._queryID = parent._queryID + 1;
+                    var queryIDToPass = parent._queryID;
+                    parent._lastQueryID = queryIDToPass;
+
+                    this.SharePointContext.executeQueryAsync(
+                        function (sender, args) {
+                            parent.QuerySuccess(sender, args, queryIDToPass, searchResult);
+                        },
+                        function (sender, args) {
+                            parent.QueryFailure(queryIDToPass);
+                        });
                 }
             }
         }
-
-
-    };
+        //tab or escape
+        else if (keynum === 9 || keynum === 27) {
+            //TODO implement escape logic here
+            parent.HideSelectionBox();
+        }
+    }
 }

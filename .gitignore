@@ -24,3 +24,4 @@
 /src/node_modules
 /src/npm-debug.log
 /src/ajs-sp-addIn/bin/Debug
+/src/.vs

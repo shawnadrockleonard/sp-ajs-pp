@@ -1,0 +1,35 @@
+﻿
+<div class="titlebox">
+    <h4>{{name}}</h4>
+</div>
+
+
+<div class="form-group">
+    <div class="row">
+        <label for="title" class="control-label col-lg-4">RFC Title</label>
+        <div class="col-lg-4">
+            <input class="form-control" id="ReleaseTitle" name="ReleaseTitle" type="text" [(ngModel)]="name">
+        </div>
+        <div class="col-lg-4">Enter a short description of the change</div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            Single Picker
+            <peoplepicker [(ngModel)]="peopleSinglePicker" [allowMultiple]="false" [principalType]="1"></peoplepicker>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            Break Point or Point Break
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            Multi Picker
+            <peoplepicker [(ngModel)]="peopleMultPicker" [allowMultiple]="true" [principalType]="1"></peoplepicker>
+        </div>
+    </div>
+</div>
