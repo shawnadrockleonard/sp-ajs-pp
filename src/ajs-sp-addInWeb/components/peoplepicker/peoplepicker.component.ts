@@ -5,8 +5,8 @@ import {Component, Self, Input, Output, AfterViewInit, EventEmitter} from '@angu
 import {CORE_DIRECTIVES, NgFor} from '@angular/common';
 import {FORM_DIRECTIVES, ControlValueAccessor, NgModel} from '@angular/forms';
 import { Http, HTTP_PROVIDERS, XHRBackend } from '@angular/http';
-import {PeoplePickerUtils} from './peoplepicker-utils.ts';
-import {PeoplePickerPrincipalId} from './peoplepicker-principalid.ts';
+import {PeoplePickerUtils} from './peoplepicker-utils';
+import {PeoplePickerPrincipalId} from './peoplepicker-principalid';
 import { spcontextService } from '../services/spcontext-service';
 
 
@@ -83,7 +83,7 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
     public ResolvedUsers: Array<PeoplePickerPrincipalId> = new Array<PeoplePickerPrincipalId>();
     public ResultantUsers: Array<PeoplePickerPrincipalId> = new Array<PeoplePickerPrincipalId>();
 
-    @Output() public selectionDone: EventEmitter<Array<PeoplePickerPrincipalId>> = new EventEmitter<Array<PeoplePickerPrincipalId>>(undefined);
+    @Output() public selectionDone: EventEmitter<string> = new EventEmitter<string>(undefined);
 
 
     public cd: NgModel;
@@ -92,8 +92,8 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
     public onTouched: any = Function.prototype;
 
     @Input()
-    public get activeUsers(): Array<PeoplePickerPrincipalId> {
-        return this.ResolvedUsers || this._nowUsers;
+    public get activeUsers(): string {
+        return JSON.stringify(this.ResolvedUsers) || JSON.stringify(this._nowUsers);
     }
 
     public constructor( @Self() cd: NgModel, private spcontext: spcontextService) {
@@ -103,33 +103,59 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
     }
 
     public ngAfterViewInit(): any {
-        var parent = this; 
+        var parent = this;
         // TODO: examine if this is where we parse the JSON into the object
     }
 
-    public set activeUsers(value: Array<PeoplePickerPrincipalId>) {
-        this.ResolvedUsers = value;
+    public set activeUsers(value: string) {
+        var parent = this;
+        parent.onInitializeFromString(value);
     }
 
-    public onSelectionDone(event: Array<PeoplePickerPrincipalId>): void {
+    public onInitializeFromString(value: string) {
+        var parent = this;
+        if (value.length > 0) {
+            // Deserialize JSON string into list of resolved users
+            var resultValue = value;
+            var results = $.parseJSON(resultValue);
+            if (results && results.length && results.length > 0) {
+
+                var projectUsers = new Array<PeoplePickerPrincipalId>();
+                var displayCount = results.length;
+                for (var i = 0; i < displayCount; i++) {
+                    var item = results[i];
+                    var loginName = item['login'];
+                    var displayName = item['displayName'];
+                    var title = item['title'];
+                    var email = item['email'];
+                    var usrModel = new PeoplePickerPrincipalId(loginName, parent.HtmlEncode(displayName), email, displayName, title, loginName);
+                    projectUsers.push(usrModel);
+                }
+            }
+
+            this.ResolvedUsers = projectUsers;
+        }
+    }
+
+    public onSelectionDone(event: string): void {
         this.selectionDone.emit(event);
     }
 
-    public onUpdate(event: Array<PeoplePickerPrincipalId>): void {
+    public onUpdate(event: string): void {
         this.writeValue(event);
         this.cd.viewToModelUpdate(event);
     }
 
-    public writeValue(value: Array<PeoplePickerPrincipalId>): void {
-        if (value === this.ResolvedUsers) {
+    public writeValue(value: string): void {
+        if (value === JSON.stringify(this.ResolvedUsers)) {
             return;
         }
-        if (value && value instanceof Array) {
-            this.ResolvedUsers = value;
+        if (value && value != null) {
+            this.onInitializeFromString(value);
             return;
         }
 
-        this.ResolvedUsers = value ? value : new Array<PeoplePickerPrincipalId>();
+        this.onInitializeFromString(value ? value : JSON.stringify(new Array<PeoplePickerPrincipalId>()));
     }
 
     public registerOnChange(fn: (_: any) => {}): void { this.onChange = fn; }
@@ -314,13 +340,16 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
         }
 
         this.pickerFieldHiddenName = JSON.stringify(this.ResolvedUsers);
-        this.onUpdate(this.ResolvedUsers);
+        this.onUpdate(this.pickerFieldHiddenName);
     };
 
-    // Remove last added resolved user from the array and updates the hidden field control with a JSON string
+    /**
+     * Remove last added resolved user from the array and updates the hidden field control with a JSON string
+     */
     public PopResolvedUser() {
         this.ResolvedUsers.pop();
         this.pickerFieldHiddenName = JSON.stringify(this.ResolvedUsers);
+        this.onUpdate(this.pickerFieldHiddenName);
     };
 
 
@@ -351,7 +380,7 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
         }
         this.ResolvedUsers = newResolvedUsers;
         this.pickerFieldHiddenName = JSON.stringify(newResolvedUsers);
-        this.onUpdate(newResolvedUsers);
+        this.onUpdate(this.pickerFieldHiddenName);
     };
 
     // Update the people picker control to show the newly added user
@@ -456,27 +485,9 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
         //Capture reference to current control so that it can be used in event handlers
         var parent = this;
 
-
         // is there data in the hidden control...if so show it
         if (parent.pickerFieldHiddenName.length > 0) {
-            // Deserialize JSON string into list of resolved users
-            var resultValue = parent.pickerFieldHiddenName;
-            var results = $.parseJSON(resultValue);
-            if (results && results.length && results.length > 0) {
-
-                var projectUsers = new Array<PeoplePickerPrincipalId>();
-                var displayCount = results.length;
-                for (var i = 0; i < displayCount; i++) {
-                    var item = results[i];
-                    var loginName = item['login'];
-                    var displayName = item['displayName'];
-                    var title = item['title'];
-                    var email = item['email'];
-                    var usrModel = new PeoplePickerPrincipalId(loginName, parent.HtmlEncode(displayName), email, displayName, title, loginName);
-                    projectUsers.push(usrModel);
-                }
-                this.ResultantUsers = projectUsers;
-            }
+            parent.onInitializeFromString(parent.pickerFieldHiddenName);
         }
     };
 
@@ -489,7 +500,24 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
 
         //backspace
         if (keynum === 8) {
-            //TODO implement logic here
+            //hide the suggestion box when backspace has been pressed
+            parent.HideSelectionBox();
+            // do we have text entered
+            var unvalidatedText = parent.searchText;
+            if (unvalidatedText.length > 0) {
+                // delete the last entered character...meaning do nothing as this delete will happen as part of the keypress
+            }
+            else {
+                // are there resolved users, if not there's nothing to delete
+                if (parent.ResolvedUsers.length > 0) {
+                    // remove the last added user
+                    parent.PopResolvedUser();
+                    // focus back to input control
+                    parent.pickerFieldInputNameFocus = true;
+                    // Eat the backspace key
+                    return false;
+                }
+            }
         }
         // An ascii character or a space has been pressed
         else if ((keynum >= 48 && keynum <= 90) || (keynum >= 96 && keynum <= 122) || keynum === 32) {
@@ -509,7 +537,7 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
                     this.ShowSelectionBox();
 
                     var ptype = SP.Utilities.PrincipalType.user;
-                    
+
                     var query = new SP.UI.ApplicationPages.ClientPeoplePickerQueryParameters();
                     query.set_allowMultipleEntities(this.allowMultiple);
                     query.set_maximumEntitySuggestions(2000);
@@ -524,13 +552,37 @@ export class PeoplePickerComponent implements ControlValueAccessor, AfterViewIni
                     var queryIDToPass = parent._queryID;
                     parent._lastQueryID = queryIDToPass;
 
-                    this.SharePointContext.executeQueryAsync(
-                        function (sender, args) {
-                            parent.QuerySuccess(sender, args, queryIDToPass, searchResult);
-                        },
-                        function (sender, args) {
+
+                    //Handling both previous scenarios that were split in two very similar files
+                    //First scenario uses standard JSOM APIs to resolve users
+                    //Second one uses a ServerDataMethod via this class' constructor and exposed in code-behind as WebMethod (Appendix D in readme file)
+                    if (typeof parent.ServerDataMethod === typeof (undefined)) {
+                        // make the SharePoint request using JSOM
+
+                        this.SharePointContext.executeQueryAsync(
+                            function (sender, args) {
+                                parent.QuerySuccess(sender, args, queryIDToPass, searchResult);
+                            },
+                            function (sender, args) {
+                                parent.QueryFailure(queryIDToPass);
+                            });
+                    }
+                    else {
+                        var spGroupName = parent.GetSpGroupName();
+
+                        //make call to method in code-behind
+                        $.ajax({
+                            type: "POST",
+                            url: parent.GetServerDataMethod() + "?SearchString=" + parent.searchText + "&SPHostUrl=" + parent.GetSpHostUrl() + "&PrincipalType=" + parent.GetPrincipalType() + (spGroupName ? "&SPGroupName=" + spGroupName : ""),
+                            data: "{}",
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json"
+                        }).done(function (data, textStatus, jqXHR) {
+                            parent.QuerySuccess(textStatus, jqXHR, queryIDToPass, data.d);
+                        }).fail(function (sender, args) {
                             parent.QueryFailure(queryIDToPass);
                         });
+                    }
                 }
             }
         }

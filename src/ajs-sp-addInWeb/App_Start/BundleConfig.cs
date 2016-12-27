@@ -28,6 +28,7 @@ namespace ajs_sp_addInWeb
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/corev15.css",
                       "~/Content/site.css"));
         }
     }

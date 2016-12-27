@@ -20,8 +20,8 @@ npm-debug.log
 /doc
 
 # ignore inline compiling
-ajs2-bootstrap.js
-ajs2-bootstrap.js.map
+/directives/pp-bootstrap.js
+/directives/pp-bootstrap.map
 /apps/**/*.js
 /apps/**/*.js.map
 /components/**/*.js

@@ -2,6 +2,18 @@
   "name": "ajs-pnp-peoplepicker",
   "description": "A component for injecting the people picker against a specific model property.",
   "version": "1.0.0",
+  "main": "pp-bootstrap.js",
+  "typings": "pp-bootstrap.d.ts",
+  "scripts": {
+    "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
+    "lite": "lite-server",
+    "tsc": "tsc",
+    "tsc:w": "tsc -w",
+    "typings": "typings",
+    "test": "gulp test",
+    "postinstall": "typings install",
+    "dev": "lite-server"
+  },
   "dependencies": {
     "@angular/common": "2.0.0-rc.5",
     "@angular/compiler": "2.0.0-rc.5",
@@ -58,19 +70,8 @@
     "systemjs-builder": "0.15.23",
     "tslint-config-valorsoft": "1.1.0",
     "typedoc": "0.4.4",
+    "plugin-typescript": "5.0.19",
     "typescript": "1.8.10",
     "typings": "1.3.1"
-  },
-  "scripts": {
-    "start": "tsc && concurrently \"npm run tsc:w\" \"npm run lite\" ",
-    "lite": "lite-server",
-    "tsc": "tsc",
-    "tsc:w": "tsc -w",
-    "typings": "typings",
-    "test": "gulp test",
-    "postinstall": "typings install",
-    "dev": "lite-server"
-  },
-  "main": "ajs2-bootstrap.js",
-  "typings": "ajs2-bootstrap.d.ts"
+  }
 }

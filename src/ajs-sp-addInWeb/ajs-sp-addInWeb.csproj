@@ -254,7 +254,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <TypeScriptCompile Include="ajs2-bootstrap.ts" />
+    <TypeScriptCompile Include="directives\pp-bootstrap.ts" />
     <TypeScriptCompile Include="Apps\main.ts" />
     <TypeScriptCompile Include="Apps\peoplepicker-demo.ts" />
     <TypeScriptCompile Include="components\peoplepicker.ts" />

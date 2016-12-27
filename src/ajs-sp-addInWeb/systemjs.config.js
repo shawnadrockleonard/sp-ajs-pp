@@ -19,7 +19,7 @@
         'moment': 'https://npmcdn.com/moment@2.14.1',
         'rxjs': 'https://npmcdn.com/rxjs@5.0.0-beta.6',
         'ts': 'https://npmcdn.com/plugin-typescript@4.0.10/lib',
-        'typescript': 'https://npmcdn.com/typescript@1.8.10',
+        'typescript': 'https://npmcdn.com/typescript@1.8.10'
     };
 
     //packages tells the System loader how to load when no filename and/or no extension

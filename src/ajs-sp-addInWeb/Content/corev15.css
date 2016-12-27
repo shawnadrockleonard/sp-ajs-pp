@@ -23,13 +23,6 @@ body,
     line-height: normal;
 }
 
-body {
-    margin: 0px;
-    overflow: hidden;
-    /* [ReplaceColor(themeColor:"PageBackground")] */ background-color: #fff;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
 
 html > .ms-core-needIEFilter {
     /* [ReplaceBGImage] */ -ms-filter: "progid:DXImageTransform.Microsoft.AlphaImageLoader(src='about:blank',sizingMethod='scale');";
