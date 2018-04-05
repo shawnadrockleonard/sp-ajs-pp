@@ -1,27 +1,27 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27428.2027
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajs.1", "ajs.1\ajs.1.csproj", "{0F02FECD-A2B5-4662-9B5B-092BD244C6D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajs.2", "ajs.2\ajs.2.csproj", "{50AEAE65-83FB-410B-B4A8-4CDA1273F85C}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED2D1898-9274-44C6-8730-4AD764156A4C}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ajsdemoweb", "ajsdemoweb\ajsdemoweb.xproj", "{71AECE82-11F9-4C34-B821-DDAE6C4446FA}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular2", "Angular2", "{1D39580E-7923-4EAA-A54C-62C74506E361}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular1", "Angular1", "{A148AB8C-FF6B-4FE5-9BB2-B5BC48166377}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajs.1", "ajs.1\ajs.1.csproj", "{0F02FECD-A2B5-4662-9B5B-092BD244C6D3}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajs.2", "ajs.2\ajs.2.csproj", "{50AEAE65-83FB-410B-B4A8-4CDA1273F85C}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ajsdemoweb", "ajsdemoweb\ajsdemoweb.csproj", "{71AECE82-11F9-4C34-B821-DDAE6C4446FA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajs-sp-addIn", "ajs-sp-addIn\ajs-sp-addIn.csproj", "{1752455B-CEA1-4FF3-ADC6-8F724E5FCC73}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ajs-sp-addInWeb", "ajs-sp-addInWeb\ajs-sp-addInWeb.csproj", "{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular1", "Angular1", "{A148AB8C-FF6B-4FE5-9BB2-B5BC48166377}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AJSPP", "AJSPP\AJSPP.csproj", "{8F91B186-8D9A-41F9-9A9B-A3FFD481F31F}"
 EndProject
@@ -77,8 +77,5 @@ Global
 		{8BB8BBE1-3AC1-43A6-8E22-92172DC1E357} = {1D39580E-7923-4EAA-A54C-62C74506E361}
 		{8F91B186-8D9A-41F9-9A9B-A3FFD481F31F} = {A148AB8C-FF6B-4FE5-9BB2-B5BC48166377}
 		{1885FA5C-6F2C-4EF5-9CA1-A92C7792BCF6} = {A148AB8C-FF6B-4FE5-9BB2-B5BC48166377}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {590CCA45-AE89-4500-AFC5-D116BEA032B3}
 	EndGlobalSection
 EndGlobal
