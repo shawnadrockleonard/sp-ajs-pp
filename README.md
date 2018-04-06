@@ -1,6 +1,7 @@
 # sp-ajs-pp
 AngularJS People Picker Component
 
+``` xml
    <site name="ajsppv2" id="2">
                 <application path="/" applicationPool="Clr4IntegratedAppPool">
                     <virtualDirectory path="/" physicalPath="C:\vSource\git\sp-ajs-pp\src\ajs.2\demo" />
@@ -10,5 +11,5 @@ AngularJS People Picker Component
                     <binding protocol="http" bindingInformation="*:4801:localhost" />
                 </bindings>
             </site>
-
+```
 C:\Program Files (x86)\IIS Express>iisexpress /site:ajsppv2
